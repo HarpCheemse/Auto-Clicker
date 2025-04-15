@@ -1,0 +1,7 @@
+#define IDI_ICON_BIG 1000
+#define IDI_ICON_SMALL 1001
+#define IDB_LEFT_CLICK 1002
+#define IDB_RIGHT_CLICK 1003
+
+
+

@@ -1,0 +1,30 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "C/C++: gcc.exe build active file",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "-g",
+                "${workspaceFolder}/src/gui.c", 
+                "${workspaceFolder}/src/AutoClicker.c",
+                "${workspaceFolder}/src/gui_logic.c",
+                "${workspaceFolder}/assets/AutoClicker_rs.o",
+                "-o",
+                "${workspaceFolder}/src/AutoClicker.exe",
+                "-luser32",
+                "-lgdi32",
+                "-lcomctl32",
+                "-Wall",
+                "-Wextra",
+                "-std=c11"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"]
+        }
+    ]
+}
