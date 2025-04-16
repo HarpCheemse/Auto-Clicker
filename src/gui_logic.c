@@ -35,28 +35,29 @@ void Update_RightClick_CPS()
     sprintf(label_rightclick_cps, "Your Current CPS Is: %d", RIGHT_CLICK_PER_SECOND);
     SetWindowText(hLabel_Current_RightClick_CPS, label_rightclick_cps);
 }
+void Toggle_AutoClicker_Off()
+{
+    TOGGLE_LEFT_CLICK_AUTO_CLICKER = 0;
+    TOGGLE_RIGHT_CLICK_AUTO_CLICKER = 0;
+    SetWindowText(hLabel_LeftClick_Status, TOGGLE_LEFT_CLICK_AUTO_CLICKER ? "Status: ON" : "Status: OFF");
+    SetWindowText(hLabel_RightClick_Status, TOGGLE_RIGHT_CLICK_AUTO_CLICKER ? "Status: ON" : "Status: OFF");
+}
 void Change_LeftClick_KeyBind()
 {
-    char buffer[50];
+    Toggle_AutoClicker_Off();
     while (1) 
     {
         int key = getKeyPressed();
-        if(key == -1)
+        Toggle_AutoClicker_Off();
+        if(key == -1 || key == TOGGLE_RIGHT_CLICK_KEY_BIND || key == KILL_SWITCH)
         {
-            sprintf(buffer, "NONE");
-            SetWindowText(hLabel_Current_LeftClick_KeyBind, buffer);
+            SetWindowText(hLabel_Current_LeftClick_KeyBind, "NONE");
             TOGGLE_LEFT_CLICK_KEY_BIND = key;
             break;
         }
-        else if(key == TOGGLE_RIGHT_CLICK_KEY_BIND)           //stop asign right click keybind
+        else
         {
-            sprintf(buffer, "NONE");
-            SetWindowText(hLabel_Current_LeftClick_KeyBind, buffer);
-            TOGGLE_LEFT_CLICK_KEY_BIND = -1;
-            if(TOGGLE_RIGHT_CLICK_AUTO_CLICKER) TOGGLE_RIGHT_CLICK_AUTO_CLICKER = 0;
-        }
-        else if(key != 0)
-        {
+            char buffer[20];
             GetKeyNameTextA((LONG)MapVirtualKey(key, MAPVK_VK_TO_VSC) << 16, buffer, sizeof(buffer));
             SetWindowText(hLabel_Current_LeftClick_KeyBind, buffer);
             TOGGLE_LEFT_CLICK_KEY_BIND = key;
@@ -66,29 +67,45 @@ void Change_LeftClick_KeyBind()
 }
 void Change_RightClick_KeyBind()
 {
-    char buffer[50];
+    Toggle_AutoClicker_Off();
     while (1) 
     {
         int key = getKeyPressed();
-        if(key == -1)
+        Toggle_AutoClicker_Off();
+        if(key == -1 || key == TOGGLE_LEFT_CLICK_KEY_BIND || key == KILL_SWITCH)
         {
-            sprintf(buffer, "NONE");
+            SetWindowText(hLabel_Current_RightClick_KeyBind, "NONE");
+            TOGGLE_RIGHT_CLICK_KEY_BIND = key;
+            break;
+        }
+        else
+        {
+            char buffer[20];
+            GetKeyNameTextA((LONG)MapVirtualKey(key, MAPVK_VK_TO_VSC) << 16, buffer, sizeof(buffer));
             SetWindowText(hLabel_Current_RightClick_KeyBind, buffer);
             TOGGLE_RIGHT_CLICK_KEY_BIND = key;
             break;
         }
-        else if(key == TOGGLE_LEFT_CLICK_KEY_BIND)           //stop asign right click keybind
+    }
+}
+void Change_Kill_Switch_KeyBind()
+{
+    Toggle_AutoClicker_Off();
+    while(1)
+    {
+        int key = getKeyPressed();
+        if(key == -1 || key == TOGGLE_LEFT_CLICK_KEY_BIND || key == TOGGLE_RIGHT_CLICK_KEY_BIND)
         {
-            sprintf(buffer, "NONE");
-            SetWindowText(hLabel_Current_RightClick_KeyBind, buffer);
-            TOGGLE_RIGHT_CLICK_KEY_BIND = -1;
-            if(TOGGLE_LEFT_CLICK_AUTO_CLICKER) TOGGLE_LEFT_CLICK_AUTO_CLICKER = 0;
+            SetWindowText(hLabel_Current_KillSwitch_KeyBind, "ESC");
+            KILL_SWITCH = 27;
+            break;
         }
-        else if(key != 0)
+        else
         {
+            char buffer[20];
             GetKeyNameTextA((LONG)MapVirtualKey(key, MAPVK_VK_TO_VSC) << 16, buffer, sizeof(buffer));
-            SetWindowText(hLabel_Current_RightClick_KeyBind, buffer);
-            TOGGLE_RIGHT_CLICK_KEY_BIND = key;
+            SetWindowText(hLabel_Current_KillSwitch_KeyBind, buffer);
+            KILL_SWITCH = key;
             break;
         }
     }

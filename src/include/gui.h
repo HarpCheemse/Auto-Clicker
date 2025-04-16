@@ -15,4 +15,9 @@ extern HWND hEdit_RightClick;
 extern HWND hLabel_Current_LeftClick_KeyBind;
 extern HWND hLabel_Current_RightClick_KeyBind;
 
+extern HWND hLabel_LeftClick_Status;
+extern HWND hLabel_RightClick_Status;
+
+extern HWND hLabel_Current_KillSwitch_KeyBind;
+
 #endif

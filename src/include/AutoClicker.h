@@ -10,6 +10,9 @@ extern int TOGGLE_RIGHT_CLICK_AUTO_CLICKER;
 extern int TOGGLE_LEFT_CLICK_KEY_BIND;
 extern int TOGGLE_RIGHT_CLICK_KEY_BIND;
 
+extern int KILL_SWITCH;
+extern int Quit_Program;
+
 void startAutoClicker();
 int getKeyPressed();
 

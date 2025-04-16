@@ -15,6 +15,7 @@
 #define ID_BUTTON_EXIT 107
 #define ID_BUTTON_KILL_SWITCH 108
 
+#define QUIT_PROGRAM -100
 
 char label_leftclick_cps[255];
 char label_rightclick_cps[255];
@@ -34,6 +35,8 @@ HWND hLabel_Warning_Right_Click;
 
 HWND hLabel_LeftClick_Status;
 HWND hLabel_RightClick_Status;
+
+HWND hLabel_Current_KillSwitch_KeyBind;
 
 HBRUSH hWhiteBrush;
 HFONT hFont13_NORMAL, hFont16_BOLD, hFont18_BOLD, hFont11_NORMAL;
@@ -93,7 +96,7 @@ switch (msg)
     {
     case WM_CREATE:
 
-    SetTimer(hwnd, 1, 300, NULL);
+    SetTimer(hwnd, 1, 100, NULL);
     hWhiteBrush = (HBRUSH)GetStockObject(WHITE_BRUSH);  
 
     hFont11_NORMAL = createUIFont(11, FW_NORMAL, "Segeo UI");
@@ -170,7 +173,7 @@ switch (msg)
 
     //Button_Kill_Switch
     createButton(hwnd, "Change KeyBind", 10, 385, 140, 40, BS_FLAT, ID_BUTTON_KILL_SWITCH, hFont16_BOLD);
-    createLabel(hwnd, "NONE", 160, 405, 100, 20,
+    hLabel_Current_KillSwitch_KeyBind = createLabel(hwnd, "ESC", 160, 405, 100, 20,
         WS_CHILD | WS_BORDER | SS_CENTER | SS_CENTERIMAGE, ID_BUTTON, hFont13_NORMAL);
     createLabel(hwnd, "Kill Switch", 185, 390, 50, 15, 0, ID_LABEL, hFont13_NORMAL);
     break;
@@ -192,23 +195,18 @@ switch (msg)
 
     //Button Click
     if (LOWORD(wParam) == ID_TOGGLE_LEFT_CLICK) 
-    {   
-        if(TOGGLE_LEFT_CLICK_AUTO_CLICKER)
-        {
-            TOGGLE_LEFT_CLICK_AUTO_CLICKER = 0;
-            break;
-        }
+    {   SetFocus(hwnd);
         Change_LeftClick_KeyBind();
     }
-    if (LOWORD(wParam) == ID_TOGGLE_RIGHT_CLICK)
+    if (LOWORD(wParam) == ID_TOGGLE_RIGHT_CLICK) 
     {
-        if(TOGGLE_RIGHT_CLICK_AUTO_CLICKER)
-        {
-            TOGGLE_RIGHT_CLICK_AUTO_CLICKER = 0;
-            break;
-        }
+        SetFocus(hwnd);
         Change_RightClick_KeyBind();
-    } 
+    }
+    if (LOWORD(wParam) == ID_BUTTON_KILL_SWITCH) 
+    {   SetFocus(hwnd);
+        Change_Kill_Switch_KeyBind();
+    }
     if (LOWORD(wParam) == ID_BUTTON_GITHUB) ShellExecute(hwnd, "open", "https://github.com/HarpCheemse/Auto-Clicker", NULL, NULL, SW_SHOWNORMAL);
     if (LOWORD(wParam) == ID_BUTTON_EXIT) PostQuitMessage(0);
     break;
@@ -237,9 +235,10 @@ switch (msg)
         break;
     case WM_TIMER:
     {
+        if (GetAsyncKeyState(KILL_SWITCH) & 0x8000) PostQuitMessage(0);
         SetWindowText(hLabel_LeftClick_Status, TOGGLE_LEFT_CLICK_AUTO_CLICKER ? "Status: ON" : "Status: OFF");
         SetWindowText(hLabel_RightClick_Status, TOGGLE_RIGHT_CLICK_AUTO_CLICKER ? "Status: ON" : "Status: OFF");
-    }   
+    }
     break;
     case WM_DESTROY:
         PostQuitMessage(0);
@@ -247,7 +246,6 @@ switch (msg)
 
     default:
         return DefWindowProc(hwnd, msg, wParam, lParam);
-    
     }
     return 0;
 }

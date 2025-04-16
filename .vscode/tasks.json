@@ -16,6 +16,7 @@
                 "-luser32",
                 "-lgdi32",
                 "-lcomctl32",
+                "-mwindows",
                 "-Wall",
                 "-Wextra",
                 "-std=c11"

@@ -11,6 +11,9 @@ int RIGHT_CLICK_PER_SECOND = 0;
 int TOGGLE_LEFT_CLICK_KEY_BIND = -1;
 int TOGGLE_RIGHT_CLICK_KEY_BIND = -1;
 
+int KILL_SWITCH = 27;
+int QUIT_PROGRAM = -100;
+
 void getKeybind();
 void printMenu();
 void refreshMenu();
@@ -32,24 +35,18 @@ void* clickEvent(void*)
 {
     while(1)
     {
-        if (GetAsyncKeyState(TOGGLE_LEFT_CLICK_KEY_BIND) & 0x8000)
+        if ((GetAsyncKeyState(TOGGLE_LEFT_CLICK_KEY_BIND) & 0x8000) && LEFT_CLICK_PER_SECOND != 0)
         {
             TOGGLE_LEFT_CLICK_AUTO_CLICKER = !TOGGLE_LEFT_CLICK_AUTO_CLICKER;
             Sleep(150); //debound delay
         }
-        if (GetAsyncKeyState(TOGGLE_RIGHT_CLICK_KEY_BIND) & 0x8000)
+        if ((GetAsyncKeyState(TOGGLE_RIGHT_CLICK_KEY_BIND) & 0x8000) && RIGHT_CLICK_PER_SECOND != 0)
         {
             TOGGLE_RIGHT_CLICK_AUTO_CLICKER = !TOGGLE_RIGHT_CLICK_AUTO_CLICKER;
             Sleep(150); //debound delay
         }
-        if(LEFT_CLICK_PER_SECOND != 0 && TOGGLE_LEFT_CLICK_AUTO_CLICKER != 0 && TOGGLE_LEFT_CLICK_KEY_BIND != -1)
-        {
-            performLeftClick();
-        }
-        if(RIGHT_CLICK_PER_SECOND != 0 && TOGGLE_RIGHT_CLICK_AUTO_CLICKER != 0 && TOGGLE_RIGHT_CLICK_KEY_BIND != -1)
-        {
-            performRightClick();
-        }
+        if(LEFT_CLICK_PER_SECOND != 0 && TOGGLE_LEFT_CLICK_AUTO_CLICKER != 0 && TOGGLE_LEFT_CLICK_KEY_BIND != -1) performLeftClick();
+        if(RIGHT_CLICK_PER_SECOND != 0 && TOGGLE_RIGHT_CLICK_AUTO_CLICKER != 0 && TOGGLE_RIGHT_CLICK_KEY_BIND != -1) performRightClick();
         Sleep(1);
     }
     return NULL;
@@ -62,7 +59,7 @@ void performRightClick()
         for(int i = 0; i <= RIGHT_CLICK_PER_SECOND/41; i++) rightClick();
         Sleep(sleep_for_right_click);
     }
-    else
+    else //check for low cps so sleep would not miss key check
     {
         rightClick();
         for(int i  = 0; i<= sleep_for_right_click; i += 20)
