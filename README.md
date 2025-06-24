@@ -2,7 +2,7 @@
 Are You Tired?  
 Same But Now You Can Use Super OP Auto Clicker While You Are Tired  
 
-Written in C. WIN32 BASED  
+Written in C. WIN32
 
 Features:  
 - Left Click Auto Clicker  
